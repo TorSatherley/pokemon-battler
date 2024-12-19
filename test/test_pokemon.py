@@ -1,4 +1,4 @@
-from src.pokemon import Pokemon,Fire,Water,Grass,Normal,Pokeball
+from src.pokemon import Pokemon,Fire,Water,Grass,Normal,Pokeball, Trainer
 
 class TestProperties:
     def test_eevee_returns_relevant_properties(self):
@@ -116,3 +116,22 @@ class TestPokeball:
         test_pokeball = Pokeball()
         test_pokeball.catch('Flareon')
         assert test_pokeball.is_empty() == False
+
+
+class TestTrainer:
+    def test_throw_pokeball_will_allocate_pokemon_to_ball(self):
+        test_throw = Trainer()
+        test_throw.throw_pokeball('Eevee')
+        assert test_throw.trainer_belt == {1: 'Eevee', 2: None, 3: None, 4: None, 5: None, 6: None}
+    
+    def test_throw_pokeball_will_allocate_multiple_throws(self):
+        test_throw = Trainer()
+        test_throw.throw_pokeball('Eevee')
+        test_throw.throw_pokeball('Vaporeon')
+        test_throw.throw_pokeball('Flareon')
+        assert test_throw.trainer_belt == {1: 'Eevee', 2: 'Vaporeon', 3: 'Flareon', 4: None, 5: None, 6: None}
+    
+    def test_throw_pokeball_should_fail_if_no_available_space(self):
+        test_throw = Trainer()
+        test_throw.trainer_belt = {1: 'Eevee', 2: 'Vaporeon', 3: 'Flareon', 4: 'Leafeon', 5: 'Charmander', 6: 'Bulbasaur'}
+        assert test_throw.throw_pokeball('Eevee') == 'Belt is full!'
