@@ -46,7 +46,6 @@ class Water(Pokemon):
         else:
             return 1
 
-        
 class Grass(Pokemon):
     def __init__(self, name, hit_points, attack_damage, move):
         super().__init__(name, hit_points, attack_damage, move)
@@ -62,7 +61,6 @@ class Grass(Pokemon):
         else:
             return 1
 
-        
 class Normal(Pokemon):
     def __init__(self, name, hit_points, attack_damage, move):
         super().__init__(name, hit_points, attack_damage, move)
@@ -87,8 +85,7 @@ class Pokeball(Pokemon):
             return True
         return False
 
-class Trainer(Pokeball, Pokemon):
-    
+class Trainer(Pokeball, Pokemon):  
     def __init__(self):
         self.pokeball1 = Pokeball()
         self.pokeball2 = Pokeball()
@@ -109,4 +106,35 @@ class Trainer(Pokeball, Pokemon):
         else:
             return 'Belt is full!'
 
-class Battle
+class Battle(Fire, Water, Grass, Normal):
+    def __init__(self, pokemon_1, pokemon_2):
+        self.pokemon_1 = pokemon_1
+        self.pokemon_2 = pokemon_2
+        self.turn_counter = 1
+
+    def take_turn(self):
+        if self.turn_counter == 1:
+            self.damage_taken(self.pokemon_1, self.pokemon_2)
+            self.turn_counter +=1
+        else:
+            self.damage_taken(self.pokemon_2, self.pokemon_1)
+            self.turn_counter -= 1
+
+    def damage_taken(self, attacker, defender):
+
+        total_damage = int(attacker.get_multiplier(defender) * attacker.attack_damage)
+        defender.hit_points -= total_damage
+        pass
+
+        
+
+    # check who's turn it using turn counter
+    # work out damage:
+        # get multiplier times fighter damagepoints damage_with_multiplier = (self.get_multiplier(opponent) * self.attack_damage)
+    # take damage from opponents hitpoints : opponent.hitpoints -= damage_with_multiplier
+    
+
+
+        # if turn_counter == 1:
+        #     pokemon 1 takes turn
+        #     turncounter = 2
