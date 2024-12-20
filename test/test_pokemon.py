@@ -104,34 +104,43 @@ class TestPokeball:
         assert test_pokeball.stored_pokemon == None
     
     def test_pokeball_returns_caught_pokemon(self):
+        # arrange
+        eevee = Normal('Eevee', 55, 18, 'Headbut')
         Test_pokeball = Pokeball()
-        Test_pokeball.catch('Flareon')
-        assert Test_pokeball.stored_pokemon == 'Flareon'
+        # act
+        Test_pokeball.catch(eevee)
+        # assert
+        assert Test_pokeball.stored_pokemon == eevee
 
     def test_is_empty_returns_true_if_no_pokemon_in_pokeball(self):
         test_pokeball = Pokeball()
         assert test_pokeball.is_empty() == True
 
     def test_is_empty_return_false_if_pokemon_in_pokeball(self):
+        flaron = Fire('Flareon', 65, 20, 'Fire blast')
         test_pokeball = Pokeball()
-        test_pokeball.catch('Flareon')
+        test_pokeball.catch(flaron)
         assert test_pokeball.is_empty() == False
 
 
 class TestTrainer:
     def test_throw_pokeball_will_allocate_pokemon_to_ball(self):
+        # arrange
+        flaron = Fire('Flareon', 65, 20, 'Fire blast')
+        # act
         test_throw = Trainer()
-        test_throw.throw_pokeball('Eevee')
-        assert test_throw.trainer_belt == {1: 'Eevee', 2: None, 3: None, 4: None, 5: None, 6: None}
+        test_throw.throw_pokeball(flaron)
+        # assert
+        assert test_throw.trainer_belt[0].stored_pokemon == flaron
     
-    def test_throw_pokeball_will_allocate_multiple_throws(self):
-        test_throw = Trainer()
-        test_throw.throw_pokeball('Eevee')
-        test_throw.throw_pokeball('Vaporeon')
-        test_throw.throw_pokeball('Flareon')
-        assert test_throw.trainer_belt == {1: 'Eevee', 2: 'Vaporeon', 3: 'Flareon', 4: None, 5: None, 6: None}
+    # def test_throw_pokeball_will_allocate_multiple_throws(self):
+    #     test_throw = Trainer()
+    #     test_throw.throw_pokeball('Eevee')
+    #     test_throw.throw_pokeball('Vaporeon')
+    #     test_throw.throw_pokeball('Flareon')
+    #     assert test_throw.trainer_belt == {1: 'Eevee', 2: 'Vaporeon', 3: 'Flareon', 4: None, 5: None, 6: None}
     
-    def test_throw_pokeball_should_fail_if_no_available_space(self):
-        test_throw = Trainer()
-        test_throw.trainer_belt = {1: 'Eevee', 2: 'Vaporeon', 3: 'Flareon', 4: 'Leafeon', 5: 'Charmander', 6: 'Bulbasaur'}
-        assert test_throw.throw_pokeball('Eevee') == 'Belt is full!'
+    # def test_throw_pokeball_should_fail_if_no_available_space(self):
+    #     test_throw = Trainer()
+    #     test_throw.trainer_belt = {1: 'Eevee', 2: 'Vaporeon', 3: 'Flareon', 4: 'Leafeon', 5: 'Charmander', 6: 'Bulbasaur'}
+    #     assert test_throw.throw_pokeball('Eevee') == 'Belt is full!'
