@@ -49,14 +49,14 @@ class TestTypes:
         assert test_pokemon.move == 'Giga drain'
 
     def test_water_type_inherites_from_base_class(self):
-        test_pokemon = Fire('Vaporeon', 70, 19, 'Hydro pump')
+        test_pokemon = Water('Vaporeon', 70, 19, 'Hydro pump')
         assert test_pokemon.name == 'Vaporeon'
         assert test_pokemon.hit_points == 70
         assert test_pokemon.attack_damage == 19
         assert test_pokemon.move == 'Hydro pump'
 
     def test_normal_type_inheries_from_base_class(self):
-        test_pokemon = Pokemon('Eevee', 55, 18, 'Headbut')
+        test_pokemon = Normal('Eevee', 55, 18, 'Headbut')
         assert test_pokemon.name == 'Eevee'
         assert test_pokemon.hit_points == 55
         assert test_pokemon.attack_damage == 18
@@ -133,14 +133,39 @@ class TestTrainer:
         # assert
         assert test_throw.trainer_belt[0].stored_pokemon == flaron
     
-    # def test_throw_pokeball_will_allocate_multiple_throws(self):
-    #     test_throw = Trainer()
-    #     test_throw.throw_pokeball('Eevee')
-    #     test_throw.throw_pokeball('Vaporeon')
-    #     test_throw.throw_pokeball('Flareon')
-    #     assert test_throw.trainer_belt == {1: 'Eevee', 2: 'Vaporeon', 3: 'Flareon', 4: None, 5: None, 6: None}
+    def test_throw_pokeball_will_allocate_multiple_throws(self):
+        # arrange
+        flaron = Fire('Flareon', 65, 20, 'Fire blast')
+        eevee = Normal('Eevee', 55, 18, 'Headbut')
+        leafron = Grass('Leafeon', 65, 17, 'Giga drain')
+        # act
+        vaporeon = Fire('Vaporeon', 70, 19, 'Hydro pump')
+        test_throw = Trainer()
+        test_throw.throw_pokeball(flaron)
+        test_throw.throw_pokeball(eevee)
+        test_throw.throw_pokeball(leafron)
+        # assert
+        assert test_throw.trainer_belt[0].stored_pokemon == flaron
+        assert test_throw.trainer_belt[1].stored_pokemon == eevee
+        assert test_throw.trainer_belt[2].stored_pokemon == leafron
+
     
-    # def test_throw_pokeball_should_fail_if_no_available_space(self):
-    #     test_throw = Trainer()
-    #     test_throw.trainer_belt = {1: 'Eevee', 2: 'Vaporeon', 3: 'Flareon', 4: 'Leafeon', 5: 'Charmander', 6: 'Bulbasaur'}
-    #     assert test_throw.throw_pokeball('Eevee') == 'Belt is full!'
+    def test_throw_pokeball_should_fail_if_no_available_space(self):
+        # arrange
+        flaron = Fire('Flareon', 65, 20, 'Fire blast')
+        eevee = Normal('Eevee', 55, 18, 'Headbut')
+        leafron = Grass('Leafeon', 65, 17, 'Giga drain')
+        vaporeon = Fire('Vaporeon', 70, 19, 'Hydro pump')
+        charmander = Fire('Charmander', 44, 17, 'Flamethrower')
+        squirtle = Water('Squirtle', 44, 16, 'Surf')
+        bulbasaur = Grass('Bulbasaur', 45, 16, 'Razor leaf')
+        # act
+        test_throw = Trainer()
+        test_throw.throw_pokeball(flaron)
+        test_throw.throw_pokeball(eevee)
+        test_throw.throw_pokeball(leafron)
+        test_throw.throw_pokeball(vaporeon)
+        test_throw.throw_pokeball(charmander)
+        test_throw.throw_pokeball(squirtle)
+        # assert
+        assert test_throw.throw_pokeball(bulbasaur) == 'Belt is full!'

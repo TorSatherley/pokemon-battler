@@ -93,7 +93,10 @@ class Trainer(Pokeball, Pokemon):
         self.pokeball1 = Pokeball()
         self.pokeball2 = Pokeball()
         self.pokeball3 = Pokeball()
-        self.trainer_belt = [self.pokeball1, self.pokeball2, self.pokeball3]
+        self.pokeball4 = Pokeball()
+        self.pokeball5 = Pokeball()
+        self.pokeball6 = Pokeball()
+        self.trainer_belt = [self.pokeball1, self.pokeball2, self.pokeball3, self.pokeball4, self.pokeball5, self.pokeball6]
         self.available_balls = 6
 
     def throw_pokeball(self, Pokemon):
@@ -103,8 +106,8 @@ class Trainer(Pokeball, Pokemon):
                     pokeball.catch(Pokemon)
                     self.available_balls -= 1
                     break
-            else:
-                return 'Belt is full!'
+        else:
+            return 'Belt is full!'
 
             # Pokeball.catch(Pokemon)
             # self.available_balls -= 1
