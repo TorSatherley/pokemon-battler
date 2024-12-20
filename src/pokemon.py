@@ -81,12 +81,12 @@ class Pokeball(Pokemon):
     def catch(self, Pokemon):
         if self.stored_pokemon == None:
             self.stored_pokemon = Pokemon
-    
+
     def is_empty(self):
         if self.stored_pokemon == None:
             return True
         return False
-    
+
 class Trainer(Pokeball, Pokemon):
     
     def __init__(self):
@@ -109,10 +109,4 @@ class Trainer(Pokeball, Pokemon):
         else:
             return 'Belt is full!'
 
-            # Pokeball.catch(Pokemon)
-            # self.available_balls -= 1
-
-#create a belt with max 6 balls
-#each throw pokeball will alocate a pokemon to a ball
-#loop through each ball and check if empty
-#if is empty then catch
+class Battle

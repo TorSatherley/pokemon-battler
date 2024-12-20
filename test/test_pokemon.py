@@ -132,7 +132,7 @@ class TestTrainer:
         test_throw.throw_pokeball(flaron)
         # assert
         assert test_throw.trainer_belt[0].stored_pokemon == flaron
-    
+
     def test_throw_pokeball_will_allocate_multiple_throws(self):
         # arrange
         flaron = Fire('Flareon', 65, 20, 'Fire blast')
@@ -148,8 +148,8 @@ class TestTrainer:
         assert test_throw.trainer_belt[0].stored_pokemon == flaron
         assert test_throw.trainer_belt[1].stored_pokemon == eevee
         assert test_throw.trainer_belt[2].stored_pokemon == leafron
+        assert test_throw.trainer_belt[3].stored_pokemon == None
 
-    
     def test_throw_pokeball_should_fail_if_no_available_space(self):
         # arrange
         flaron = Fire('Flareon', 65, 20, 'Fire blast')
