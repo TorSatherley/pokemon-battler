@@ -126,15 +126,5 @@ class Battle(Fire, Water, Grass, Normal):
         defender.hit_points -= total_damage
         pass
 
-        
+        # random stuff only for tor fork
 
-    # check who's turn it using turn counter
-    # work out damage:
-        # get multiplier times fighter damagepoints damage_with_multiplier = (self.get_multiplier(opponent) * self.attack_damage)
-    # take damage from opponents hitpoints : opponent.hitpoints -= damage_with_multiplier
-    
-
-
-        # if turn_counter == 1:
-        #     pokemon 1 takes turn
-        #     turncounter = 2
