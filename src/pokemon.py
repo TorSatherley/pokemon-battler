@@ -166,14 +166,21 @@ def run_pokemon_battler():
     pokemon_data, pokemon_headers = pokemon_table()
     print(tabulate((pokemon_data), headers=pokemon_headers))
 
-    choice_num_1 = int(input("Trainer 1, please enter the ID of your chosen Pokemon: "))
+    choice_num_1 = get_pokemon_id(trainer_1)
     trainer_1_pokemon = get_pokemon_class(pokemon_data, choice_num_1)
 
-
-    choice_num_2 = int(input("Trainer 2, please enter the ID of your chosen Pokemon: "))
+    choice_num_2 = get_pokemon_id(trainer_2)
     trainer_2_pokemon = get_pokemon_class(pokemon_data, choice_num_2)
     
+
     pass
+
+
+def get_pokemon_id(trainer):
+    num_choice = int(input(f"{trainer}, please enter the ID of your chosen Pokemon: "))
+    while num_choice < 1 or num_choice > 7:
+        num_choice = int(input(f"{num_choice} is not a valid Pokemon ID, please enter the ID of your chosen Pokemon: "))
+    return num_choice
 
 
 def get_pokemon_class(pokemon_data, choice_num):
@@ -183,15 +190,18 @@ def get_pokemon_class(pokemon_data, choice_num):
                         'attack_damage': pokemon_data[choice_num-1][5],
                         'move': pokemon_data[choice_num-1][4]}
     
+    attributes = trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move']
+    
     if trainer_pokemon['type'] == 'Normal':
-        pokemon_instance = Pokemon(trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move'])
+        pokemon_instance = Normal(*attributes)
     elif trainer_pokemon['type'] == 'Fire':
-        pokemon_instance = Fire(trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move'])
+        pokemon_instance = Fire(*attributes)
     elif trainer_pokemon['type'] == 'Water':
-        pokemon_instance = Water(trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move'])
+        pokemon_instance = Water(*attributes)
     elif trainer_pokemon['type'] == 'Grass':
-        pokemon_instance = Grass(trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move'])
+        pokemon_instance = Grass(*attributes)
     return pokemon_instance
+
 
 def pokemon_table():
     pokemon_data = [[1, 'Eevee', 'Normal', 55, 'Headbutt', 18, 'None', 'Fighting', 'Eev... Eevee!'],

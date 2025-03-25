@@ -1,4 +1,5 @@
-from src.pokemon import Pokemon,Fire,Water,Grass,Normal,Pokeball, Trainer, Battle
+from src.pokemon import Pokemon,Fire,Water,Grass,Normal,Pokeball, Trainer, Battle, get_pokemon_class, pokemon_table
+import pytest
 
 class TestProperties:
     def test_eevee_returns_relevant_properties(self):
@@ -255,3 +256,59 @@ class TestBattle:
 
         message = test_battle.take_turn()
         assert message == 'Flareon has fainted! Squirtle has won!'
+
+@pytest.fixture
+def pokemon_test_table():
+    pokemon_data = [[1, 'Eevee', 'Normal', 55, 'Headbutt', 18, 'None', 'Fighting', 'Eev... Eevee!'],
+            [2, 'Flareon', 'Fire', 65, 'Fire blast', 20, 'Grass', 'Water', 'Eev... Fla... Flareon!'],
+            [3, 'Vaporeon', 'Water', 70, 'Hydro pump', 19, 'Fire', 'Grass', 'Vap... Vaporeon!'],
+            [4, 'Leafeon', 'Grass', 65, 'Giga drain', 17, 'Water', 'Fire', 'Lea... Leafeon!'],
+            [5, 'Charmander', 'Fire', 44, 'Flamethrower', 17, 'Grass', 'Water', 'Cha... Charmander!'],
+            [6, 'Squirtle', 'Water', 44, 'Surf', 16, 'Fire', 'Grass', 'Squ... Squirtle!'],
+            [7, 'Bulbasaur', 'Grass', 45, 'Razor leaf', 16, 'Water', 'Fire', 'Bul... Bulbasaur!'],
+            ]
+    pokemon_headers = ['Pokemon ID', 'Name', 'Type', 'Hitpoints', 'Move', 'Damage', 'Strength', 'Weakness', 'Sound']
+    return pokemon_data, pokemon_headers
+
+
+class TestGetPokemonClass:
+    def test_function_returns_normal_type_for_normal_input(self, pokemon_test_table):
+        pokemon_data, _ = pokemon_test_table
+        choice_num = 1
+        result = get_pokemon_class(pokemon_data, choice_num)
+        assert result.type == 'Normal'
+        assert result.name == 'Eevee'
+        assert result.hit_points == 55
+        assert result.move == 'Headbutt'
+        assert result.attack_damage == 18
+
+    def test_function_returns_fire_type_for_fire_input(self, pokemon_test_table):
+        pokemon_data, _ = pokemon_test_table
+        choice_num = 2
+        result = get_pokemon_class(pokemon_data, choice_num)
+        assert result.type == 'Fire'
+        assert result.name == 'Flareon'
+        assert result.hit_points == 65
+        assert result.move == 'Fire blast'
+        assert result.attack_damage == 20
+
+    def test_function_returns_water_type_for_water_input(self, pokemon_test_table):
+        pokemon_data, _ = pokemon_test_table
+        choice_num = 3
+        result = get_pokemon_class(pokemon_data, choice_num)
+        assert result.type == 'Water'
+        assert result.name == 'Vaporeon'
+
+    def test_function_returns_grass_type_for_grass_input(self, pokemon_test_table):
+        pokemon_data, _ = pokemon_test_table
+        choice_num = 7
+        result = get_pokemon_class(pokemon_data, choice_num)
+        assert result.type == 'Grass'
+        assert result.name == 'Bulbasaur'
+
+    def test_function_raises_index_error(self, pokemon_test_table):
+        with pytest.raises(IndexError):
+            pokemon_data, _ = pokemon_test_table
+            choice_num = 8
+            get_pokemon_class(pokemon_data, choice_num)
+
