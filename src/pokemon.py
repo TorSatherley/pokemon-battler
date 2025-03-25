@@ -1,3 +1,5 @@
+from tabulate import tabulate
+
 class Pokemon:
     def __init__(self, name, hit_points, attack_damage, move):
         self.name = name
@@ -6,22 +8,23 @@ class Pokemon:
         self.move = move
 
     def use_move(self):
-        return f'{self.name} used {self.move}!'
-    
+        return f"{self.name} used {self.move}!"
+
     def take_damage(self, damage_taken):
-        self.hit_points -= damage_taken 
+        self.hit_points -= damage_taken
 
     def has_fainted(self):
         if self.hit_points < 1:
             return True
         return False
 
+
 class Fire(Pokemon):
     def __init__(self, name, hit_points, attack_damage, move):
         super().__init__(name, hit_points, attack_damage, move)
-        self.type = 'Fire'
-        self.strong_against = 'Grass'
-        self.weak_against = 'Water'
+        self.type = "Fire"
+        self.strong_against = "Grass"
+        self.weak_against = "Water"
 
     def get_multiplier(self, opponent):
         if self.strong_against == opponent.type:
@@ -30,13 +33,14 @@ class Fire(Pokemon):
             return 0.5
         else:
             return 1
+
 
 class Water(Pokemon):
     def __init__(self, name, hit_points, attack_damage, move):
         super().__init__(name, hit_points, attack_damage, move)
-        self.type = 'Water'
-        self.strong_against = 'Fire'
-        self.weak_against = 'Grass'
+        self.type = "Water"
+        self.strong_against = "Fire"
+        self.weak_against = "Grass"
 
     def get_multiplier(self, opponent):
         if self.strong_against == opponent.type:
@@ -45,13 +49,14 @@ class Water(Pokemon):
             return 0.5
         else:
             return 1
+
 
 class Grass(Pokemon):
     def __init__(self, name, hit_points, attack_damage, move):
         super().__init__(name, hit_points, attack_damage, move)
-        self.type = 'Grass'
-        self.strong_against = 'Water'
-        self.weak_against = 'Fire'
+        self.type = "Grass"
+        self.strong_against = "Water"
+        self.weak_against = "Fire"
 
     def get_multiplier(self, opponent):
         if self.strong_against == opponent.type:
@@ -61,10 +66,11 @@ class Grass(Pokemon):
         else:
             return 1
 
+
 class Normal(Pokemon):
     def __init__(self, name, hit_points, attack_damage, move):
         super().__init__(name, hit_points, attack_damage, move)
-        self.type = 'Normal'
+        self.type = "Normal"
         self.strong_against = None
         self.weak_against = None
 
@@ -72,7 +78,7 @@ class Normal(Pokemon):
         return 1
 
 
-class Pokeball():
+class Pokeball:
     def __init__(self):
         self.stored_pokemon = None
 
@@ -80,14 +86,15 @@ class Pokeball():
         if self.stored_pokemon == None:
             self.stored_pokemon = Pokemon
         else:
-            return "Pokeball isn't empty!" # improvement - raise as exception
+            return "Pokeball isn't empty!"  # improvement - raise as exception
 
     def is_empty(self):
         if self.stored_pokemon == None:
             return True
         return False
 
-class Trainer():  
+
+class Trainer:
     def __init__(self):
         self.pokeball1 = Pokeball()
         self.pokeball2 = Pokeball()
@@ -101,8 +108,8 @@ class Trainer():
             self.pokeball3,
             self.pokeball4,
             self.pokeball5,
-            self.pokeball6
-            ]
+            self.pokeball6,
+        ]
         self.available_balls = 6
 
     def throw_pokeball(self, Pokemon):
@@ -113,9 +120,10 @@ class Trainer():
                     self.available_balls -= 1
                     break
         else:
-            return 'Belt is full!' # improvement - raise as exception
+            return "Belt is full!"  # improvement - raise as exception
 
-class Battle():
+
+class Battle:
     def __init__(self, pokemon_1, pokemon_2):
         self.pokemon_1 = pokemon_1
         self.pokemon_2 = pokemon_2
@@ -127,7 +135,7 @@ class Battle():
             winner = self.get_winner(self.pokemon_1, self.pokemon_2)
             if winner is not None:
                 return winner
-            self.turn_counter +=1
+            self.turn_counter += 1
         else:
             self.damage_taken(self.pokemon_2, self.pokemon_1)
             winner = self.get_winner(self.pokemon_2, self.pokemon_1)
@@ -142,10 +150,62 @@ class Battle():
 
     def get_winner(self, attacker, defender):
         if defender.has_fainted():
-            return f'{defender.name} has fainted! {attacker.name} has won!'
+            return f"{defender.name} has fainted! {attacker.name} has won!"
         else:
             return None
-        
 
-    #
 
+def run_pokemon_battler():
+
+    print("Welcome to Pokemon Battler!")
+    print(
+        "Let's start by getting the names of the two trainers who will be battling today."
+    )
+    trainer_1 = str(input("Trainer 1 Name: "))
+    trainer_2 = str(input("Trainer 2 Name: "))
+    pokemon_data, pokemon_headers = pokemon_table()
+    print(tabulate((pokemon_data), headers=pokemon_headers))
+
+    choice_num_1 = int(input("Trainer 1, please enter the ID of your chosen Pokemon: "))
+    trainer_1_pokemon = get_pokemon_class(pokemon_data, choice_num_1)
+
+
+    choice_num_2 = int(input("Trainer 2, please enter the ID of your chosen Pokemon: "))
+    trainer_2_pokemon = get_pokemon_class(pokemon_data, choice_num_2)
+    
+    pass
+
+
+def get_pokemon_class(pokemon_data, choice_num):
+    trainer_pokemon = {'type': pokemon_data[choice_num-1][2],
+                        'name': pokemon_data[choice_num-1][1],
+                        'hit_points': pokemon_data[choice_num-1][3],
+                        'attack_damage': pokemon_data[choice_num-1][5],
+                        'move': pokemon_data[choice_num-1][4]}
+    
+    if trainer_pokemon['type'] == 'Normal':
+        pokemon_instance = Pokemon(trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move'])
+    elif trainer_pokemon['type'] == 'Fire':
+        pokemon_instance = Fire(trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move'])
+    elif trainer_pokemon['type'] == 'Water':
+        pokemon_instance = Water(trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move'])
+    elif trainer_pokemon['type'] == 'Grass':
+        pokemon_instance = Grass(trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move'])
+    return pokemon_instance
+
+def pokemon_table():
+    pokemon_data = [[1, 'Eevee', 'Normal', 55, 'Headbutt', 18, 'None', 'Fighting', 'Eev... Eevee!'],
+            [2, 'Flareon', 'Fire', 65, 'Fire blast', 20, 'Grass', 'Water', 'Eev... Fla... Flareon!'],
+            [3, 'Vaporeon', 'Water', 70, 'Hydro pump', 19, 'Fire', 'Grass', 'Vap... Vaporeon!'],
+            [4, 'Leafeon', 'Grass', 65, 'Giga drain', 17, 'Water', 'Fire', 'Lea... Leafeon!'],
+            [5, 'Charmander', 'Fire', 44, 'Flamethrower', 17, 'Grass', 'Water', 'Cha... Charmander!'],
+            [6, 'Squirtle', 'Water', 44, 'Surf', 16, 'Fire', 'Grass', 'Squ... Squirtle!'],
+            [7, 'Bulbasaur', 'Grass', 45, 'Razor leaf', 16, 'Water', 'Fire', 'Bul... Bulbasaur!'],
+            ]
+    pokemon_headers = ['Pokemon ID', 'Name', 'Type', 'Hitpoints', 'Move', 'Damage', 'Strength', 'Weakness', 'Sound']
+    return pokemon_data, pokemon_headers
+
+
+
+if __name__ == "__main__":
+    run_pokemon_battler()
