@@ -11,7 +11,7 @@ class TestProperties:
 class TestMethods:
     def test_use_move_returns_string(self):
         test_pokemon = Pokemon('Eevee', 55, 18, 'Headbut')
-        assert test_pokemon.use_move() == 'Eevee used Headbut'
+        assert test_pokemon.use_move() == 'Eevee used Headbut!'
 
     def test_takes_damage_reduces_health_by_attack_damage(self):
         test_pokemon = Pokemon('Eevee', 55, 18, 'Headbut')
@@ -104,12 +104,12 @@ class TestPokeball:
         assert test_pokeball.stored_pokemon == None
     
     def test_pokeball_returns_caught_pokemon(self):
-        # arrange
+        # Arrange
         eevee = Normal('Eevee', 55, 18, 'Headbut')
         Test_pokeball = Pokeball()
-        # act
+        # Act
         Test_pokeball.catch(eevee)
-        # assert
+        # Assert
         assert Test_pokeball.stored_pokemon == eevee
 
     def test_is_empty_returns_true_if_no_pokemon_in_pokeball(self):
@@ -125,33 +125,33 @@ class TestPokeball:
 
 class TestTrainer:
     def test_throw_pokeball_will_allocate_pokemon_to_ball(self):
-        # arrange
+        # Arrange
         flareon = Fire('Flareon', 65, 20, 'Fire blast')
-        # act
+        # Act
         test_throw = Trainer()
         test_throw.throw_pokeball(flareon)
-        # assert
+        # Assert
         assert test_throw.trainer_belt[0].stored_pokemon == flareon
 
     def test_throw_pokeball_will_allocate_multiple_throws(self):
-        # arrange
+        # Arrange
         flareon = Fire('Flareon', 65, 20, 'Fire blast')
         eevee = Normal('Eevee', 55, 18, 'Headbut')
         leafeon = Grass('Leafeon', 65, 17, 'Giga drain')
-        # act
+        # Act
         vaporeon = Fire('Vaporeon', 70, 19, 'Hydro pump')
         test_throw = Trainer()
         test_throw.throw_pokeball(flareon)
         test_throw.throw_pokeball(eevee)
         test_throw.throw_pokeball(leafeon)
-        # assert
+        # Assert
         assert test_throw.trainer_belt[0].stored_pokemon == flareon
         assert test_throw.trainer_belt[1].stored_pokemon == eevee
         assert test_throw.trainer_belt[2].stored_pokemon == leafeon
         assert test_throw.trainer_belt[3].stored_pokemon == None
 
     def test_throw_pokeball_should_fail_if_no_available_space(self):
-        # arrange
+        # Arrange
         flareon = Fire('Flareon', 65, 20, 'Fire blast')
         eevee = Normal('Eevee', 55, 18, 'Headbut')
         leafeon = Grass('Leafeon', 65, 17, 'Giga drain')
@@ -159,7 +159,7 @@ class TestTrainer:
         charmander = Fire('Charmander', 44, 17, 'Flamethrower')
         squirtle = Water('Squirtle', 44, 16, 'Surf')
         bulbasaur = Grass('Bulbasaur', 45, 16, 'Razor leaf')
-        # act
+        # Act
         test_throw = Trainer()
         test_throw.throw_pokeball(flareon)
         test_throw.throw_pokeball(eevee)
@@ -167,16 +167,16 @@ class TestTrainer:
         test_throw.throw_pokeball(vaporeon)
         test_throw.throw_pokeball(charmander)
         test_throw.throw_pokeball(squirtle)
-        # assert
+        # Assert
         assert test_throw.throw_pokeball(bulbasaur) == 'Belt is full!'
 
 class TestBattle:
     def test_battle_initialises_two_pokemon_objects(self):
         flareon = Fire('Flareon', 65, 20, 'Fire blast')
         squirtle = Water('Squirtle', 44, 16, 'Surf')
-        # act 
+        # Act 
         test_battle = Battle(flareon, squirtle)
-        # assert
+        # Assert
         assert test_battle.pokemon_1 == flareon
         assert test_battle.pokemon_2 == squirtle
 
@@ -194,6 +194,7 @@ class TestBattle:
         squirtle = Water('Squirtle', 44, 16, 'Surf')
 
         test_battle = Battle(flareon, squirtle)
+
         assert test_battle.turn_counter == 1
         test_battle.take_turn()
         assert test_battle.turn_counter == 2
@@ -202,3 +203,55 @@ class TestBattle:
         test_battle.take_turn()
         assert test_battle.turn_counter == 2
 
+    def test_get_winner_declares_winner(self):
+        flareon = Fire('Flareon', 65, 20, 'Fire blast')
+        squirtle = Water('Squirtle', 44, 16, 'Surf')
+
+        test_battle = Battle(flareon, squirtle)
+
+        test_battle.take_turn()
+        assert test_battle.pokemon_2.hit_points == 34
+        assert test_battle.get_winner(flareon, squirtle) == None
+
+        test_battle.take_turn()
+        assert test_battle.pokemon_1.hit_points == 41
+        assert test_battle.get_winner(squirtle, flareon) == None
+
+        test_battle.take_turn()
+        assert test_battle.pokemon_2.hit_points == 24
+        assert test_battle.get_winner(flareon, squirtle) == None
+
+        test_battle.take_turn()
+        assert test_battle.pokemon_1.hit_points == 17
+        assert test_battle.get_winner(squirtle, flareon) == None
+
+        winner = test_battle.take_turn()
+        assert test_battle.pokemon_2.hit_points == 14
+        assert test_battle.get_winner(flareon, squirtle) == None
+        assert winner == None
+
+        winner = test_battle.take_turn()
+        assert test_battle.pokemon_1.hit_points == -7
+        assert test_battle.get_winner(squirtle, flareon) == "Flareon has fainted! Squirtle has won!"
+        assert winner == "Flareon has fainted! Squirtle has won!"
+
+
+    def test_take_turn_raises_exception_for_already_fainted_pokemon(self):
+        flareon = Fire('Flareon', 65, 20, 'Fire blast')
+        squirtle = Water('Squirtle', 44, 16, 'Surf')
+
+        test_battle = Battle(flareon, squirtle)
+
+        test_battle.take_turn()
+        test_battle.take_turn()
+        test_battle.take_turn()
+        test_battle.take_turn()
+        test_battle.take_turn()
+
+        winner = test_battle.take_turn()
+        assert test_battle.pokemon_1.hit_points == -7
+        assert test_battle.get_winner(squirtle, flareon) == "Flareon has fainted! Squirtle has won!"
+        assert winner == "Flareon has fainted! Squirtle has won!"
+
+        message = test_battle.take_turn()
+        assert message == 'Flareon has fainted! Squirtle has won!'
