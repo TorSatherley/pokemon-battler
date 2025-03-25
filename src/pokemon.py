@@ -1,5 +1,6 @@
 from tabulate import tabulate
 
+
 class Pokemon:
     def __init__(self, name, hit_points, attack_damage, move):
         self.name = name
@@ -150,7 +151,7 @@ class Battle:
 
     def get_winner(self, attacker, defender):
         if defender.has_fainted():
-            return f"{defender.name} has fainted! {attacker.name} has won!"
+            return f"{defender.name} is down to {defender.hit_points} hit points, and has fainted! {attacker.name} has won!"
         else:
             return None
 
@@ -171,50 +172,127 @@ def run_pokemon_battler():
 
     choice_num_2 = get_pokemon_id(trainer_2)
     trainer_2_pokemon = get_pokemon_class(pokemon_data, choice_num_2)
-    
 
+    print(
+        f"{trainer_1}, your pokemon {trainer_1_pokemon.name} will now battle with {trainer_2}'s pokemon {trainer_2_pokemon.name}!"
+    )
+    battle = Battle(trainer_1_pokemon, trainer_2_pokemon)
+
+    while battle.take_turn() is None:
+        print(f"{trainer_1_pokemon.name} has {trainer_1_pokemon.hit_points} hit points left!")
+        print(f"{trainer_2_pokemon.name} has {trainer_2_pokemon.hit_points} hit points left!")
+    winning_statement = battle.take_turn()
+    print(winning_statement)
     pass
 
 
 def get_pokemon_id(trainer):
     num_choice = int(input(f"{trainer}, please enter the ID of your chosen Pokemon: "))
     while num_choice < 1 or num_choice > 7:
-        num_choice = int(input(f"{num_choice} is not a valid Pokemon ID, please enter the ID of your chosen Pokemon: "))
+        print(f"{num_choice} is not a valid Pokemon ID.")
+        num_choice = int(input("Please enter the ID of your chosen Pokemon: "))
     return num_choice
 
 
 def get_pokemon_class(pokemon_data, choice_num):
-    trainer_pokemon = {'type': pokemon_data[choice_num-1][2],
-                        'name': pokemon_data[choice_num-1][1],
-                        'hit_points': pokemon_data[choice_num-1][3],
-                        'attack_damage': pokemon_data[choice_num-1][5],
-                        'move': pokemon_data[choice_num-1][4]}
-    
-    attributes = trainer_pokemon['name'], trainer_pokemon['hit_points'], trainer_pokemon['attack_damage'], trainer_pokemon['move']
-    
-    if trainer_pokemon['type'] == 'Normal':
+    trainer_pokemon = {
+        "type": pokemon_data[choice_num - 1][2],
+        "name": pokemon_data[choice_num - 1][1],
+        "hit_points": pokemon_data[choice_num - 1][3],
+        "attack_damage": pokemon_data[choice_num - 1][5],
+        "move": pokemon_data[choice_num - 1][4],
+    }
+
+    attributes = (
+        trainer_pokemon["name"],
+        trainer_pokemon["hit_points"],
+        trainer_pokemon["attack_damage"],
+        trainer_pokemon["move"],
+    )
+
+    if trainer_pokemon["type"] == "Normal":
         pokemon_instance = Normal(*attributes)
-    elif trainer_pokemon['type'] == 'Fire':
+    elif trainer_pokemon["type"] == "Fire":
         pokemon_instance = Fire(*attributes)
-    elif trainer_pokemon['type'] == 'Water':
+    elif trainer_pokemon["type"] == "Water":
         pokemon_instance = Water(*attributes)
-    elif trainer_pokemon['type'] == 'Grass':
+    elif trainer_pokemon["type"] == "Grass":
         pokemon_instance = Grass(*attributes)
     return pokemon_instance
 
 
 def pokemon_table():
-    pokemon_data = [[1, 'Eevee', 'Normal', 55, 'Headbutt', 18, 'None', 'Fighting', 'Eev... Eevee!'],
-            [2, 'Flareon', 'Fire', 65, 'Fire blast', 20, 'Grass', 'Water', 'Eev... Fla... Flareon!'],
-            [3, 'Vaporeon', 'Water', 70, 'Hydro pump', 19, 'Fire', 'Grass', 'Vap... Vaporeon!'],
-            [4, 'Leafeon', 'Grass', 65, 'Giga drain', 17, 'Water', 'Fire', 'Lea... Leafeon!'],
-            [5, 'Charmander', 'Fire', 44, 'Flamethrower', 17, 'Grass', 'Water', 'Cha... Charmander!'],
-            [6, 'Squirtle', 'Water', 44, 'Surf', 16, 'Fire', 'Grass', 'Squ... Squirtle!'],
-            [7, 'Bulbasaur', 'Grass', 45, 'Razor leaf', 16, 'Water', 'Fire', 'Bul... Bulbasaur!'],
-            ]
-    pokemon_headers = ['Pokemon ID', 'Name', 'Type', 'Hitpoints', 'Move', 'Damage', 'Strength', 'Weakness', 'Sound']
+    pokemon_data = [
+        [1, "Eevee", "Normal", 55, "Headbutt", 18, "None", "Fighting", "Eev... Eevee!"],
+        [
+            2,
+            "Flareon",
+            "Fire",
+            65,
+            "Fire blast",
+            20,
+            "Grass",
+            "Water",
+            "Eev... Fla... Flareon!",
+        ],
+        [
+            3,
+            "Vaporeon",
+            "Water",
+            70,
+            "Hydro pump",
+            19,
+            "Fire",
+            "Grass",
+            "Vap... Vaporeon!",
+        ],
+        [
+            4,
+            "Leafeon",
+            "Grass",
+            65,
+            "Giga drain",
+            17,
+            "Water",
+            "Fire",
+            "Lea... Leafeon!",
+        ],
+        [
+            5,
+            "Charmander",
+            "Fire",
+            44,
+            "Flamethrower",
+            17,
+            "Grass",
+            "Water",
+            "Cha... Charmander!",
+        ],
+        [6, "Squirtle", "Water", 44, "Surf", 16, "Fire", "Grass", "Squ... Squirtle!"],
+        [
+            7,
+            "Bulbasaur",
+            "Grass",
+            45,
+            "Razor leaf",
+            16,
+            "Water",
+            "Fire",
+            "Bul... Bulbasaur!",
+        ],
+    ]
+    pokemon_headers = [
+        "Pokemon ID",
+        "Name",
+        "Type",
+        "Hitpoints",
+        "Move",
+        "Damage",
+        "Strength",
+        "Weakness",
+        "Sound",
+    ]
     return pokemon_data, pokemon_headers
-
 
 
 if __name__ == "__main__":
